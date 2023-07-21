@@ -28,7 +28,7 @@ int distance;
 int initDist; 
 int time = 0;
 bool started = false;
-const int threshold = 50;
+const int threshold = 30;
 
 void setup() {
   Serial.begin(9600);   // Initiate a serial communication
@@ -132,6 +132,10 @@ void cont() {
   delay(1000);
   time++;
   Serial.println(time);
+  if (time == 10) {
+    Serial.println("You've washed your hands for 10 sec! Good stuff!");
+    delay(100000);
+  }
 }
 
 void startTimer() {
