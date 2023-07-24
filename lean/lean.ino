@@ -19,6 +19,7 @@ long unsigned int pause = 5000;
 
 bool lockLow = true;
 bool takeLowTime; 
+bool cardScanned = false; //checks if card has been scanned
 
 //pin constants
 const int greenLed = 3;
@@ -34,6 +35,7 @@ char pass[] = "theCl0ud";
 //initialing vars
 int time = 0;
 bool started = false;
+int start;
 
 void setup() {
   Serial.begin(9600);   // Initiate a serial communication
@@ -57,21 +59,54 @@ void setup() {
 }
 
 void loop() {
+  if (! cardScanned) {
+    Serial.println("Approximate your card to the reader...");
+    // Look for new cards
+    if (!mfrc522.PICC_IsNewCardPresent()) {
+      delay(1000);
+      return;
+    }
+    // Select one of the cards
+    if (!mfrc522.PICC_ReadCardSerial()) {
+      delay(1000);
+      return;
+    }
+    cardScanned = true;
+    Serial.println("card scanned!");
+    handWash();
+  }
+  /*String content= "";
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
+    //Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    //Serial.print(mfrc522.uid.uidByte[i], HEX);
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
+  }
+  //Serial.println();
+  content.toUpperCase();
+  Serial.println("Welcome Michael! Start washing hands");*/
+}
+
+void handWash() {
+  Serial.println("checking for motion...");
   if(digitalRead(pirPin) == HIGH){
-    digitalWrite(greenLed, HIGH);   //the led visualizes the sensors output pin state
+    //digitalWrite(greenLed, HIGH);   //the led visualizes the sensors output pin state
     if(lockLow){  
       //makes sure we wait for a transition to LOW before any further output is made:
       lockLow = false;            
       Serial.println("---");
       Serial.print("motion detected at ");
       Serial.print(millis()/1000);
+      start = millis()/1000;
       Serial.println(" sec"); 
+      Serial.println("Youve started washing your hands!");
       delay(50);
       }         
       takeLowTime = true;
+      handWash();
     }
   if(digitalRead(pirPin) == LOW){       
-    digitalWrite(greenLed, LOW);  //the led visualizes the sensors output pin state
+    //digitalWrite(greenLed, LOW);  //the led visualizes the sensors output pin state
     if(takeLowTime){
       lowIn = millis();          //save the time of the transition from high to LOW
       takeLowTime = false;       //make sure this is only done at the start of a LOW phase
@@ -85,18 +120,30 @@ void loop() {
         Serial.print("motion ended at ");      //output
         Serial.print((millis() - pause)/1000);
         Serial.println(" sec");
+        Serial.print("Youve washed your hands for ");
+        int time = (millis() - pause) / 1000 - start;
+        Serial.print(time);
+        Serial.println("sec");
+        if (time >= 20) {
+          Serial.println("Good job! You've washed your hands for 20 sec");
+          digitalWrite(greenLed, HIGH);
+          delay(5000);
+          digitalWrite(greenLed, LOW);
+        }
+        else {
+          Serial.println("You didn't wash your hands for 20 sec! Wash them again");
+          digitalWrite(redLed, HIGH);
+          delay(5000);
+          digitalWrite(redLed, LOW);
+        }
         delay(50);
         }
     }
+    else {
+      delay(1000);
+      handWash();
+    }
 }
 
-void blinkRed() {
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(redLed, HIGH);
-    delay(100);
-    digitalWrite(redLed, LOW);
-    delay(100);
-  }
-}
 
 
