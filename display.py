@@ -3,26 +3,32 @@ from PIL import Image, ImageTk
 import tk_tools
 import time
 import matplotlib
+import tkinter.font as TkFont
 
 # Create the main window
 root = tk.Tk()
 root.geometry("800x480")
-root.configure(bg = "white")
+image1 = Image.open("bg.jpg")
+image1 = ImageTk.PhotoImage(image1)
+label1 = tk.Label(root, image = image1)
+label1.place(x = 0,y = 0)
 
 # Create the logo
+'''
 image = Image.open("sofos.png")
 photo_image = ImageTk.PhotoImage(image)
 sofos = tk.Label(root, image = photo_image)
-sofos.place(relx = 0, rely = 1, anchor = "sw")
+sofos.place(relx = 0, rely = 1, anchor = "sw")'''
 
-greeting = tk.Label(root, text = "Good afternoon Thea!", font = ("Inter", 35), padx = 10, wraplength = 300, justify = 'left')
+font1 = TkFont.Font(family = "Inter", weight = "bold", size = 55)
+greeting = tk.Label(root, text = "Hi,\nThea!", font = font1, padx = 35, wraplength = 300, justify = 'left')
 greeting.configure(bg = "white")
 greeting.place(relx = 0, rely = 0.5, anchor = "w")
 
 def countdown():
     global timer
     if timer <= 20:
-        label.config(text=f"{timer:02} sec", font = ("Inter", 35))
+        label.config(text=f"{timer:02} sec", font = ("Inter", 35), padx = 10, pady = 10)
         timer += 1
         root.after(1000, countdown)
 
@@ -35,7 +41,12 @@ procedures = ["Palm to palm", "Palm over dorsum, fingers interlaced", "Palm to p
  "Backs of fingers to opposing palm, fingers interlocked", "Rotational rubbing of the thumb", "Fingertips to palm",
  "Turning off the faucet with a paper towel"]
 
-listbox = Listbox(root, height = 7, width = 30, bg = "white", font = ("Inter", 15), fg = "black")
+todo = tk.Label(root, text = "Actions ToDo")
+font2 = TkFont.Font(family = "Inter", weight = "bold", size = 35)
+todo.config(font = font2, bg = "white", fg = "red")
+todo.place(relx = .45, rely = 0.25)
+
+listbox = tk.Listbox(root, height = 7, width = 55, bg = "white", font = ("Inter", 10), fg = "black", bd = 0)
 listbox.insert(1, "Palm to palm")
 listbox.insert(2, "Palm over dorsum, fingers interlaced")
 listbox.insert(3, "Palm to palm, fingers interlaced")
@@ -43,11 +54,14 @@ listbox.insert(4, "Backs of fingers to opposing palm, fingers interlocked")
 listbox.insert(5, "Rotational rubbing of the thumb")
 listbox.insert(6, "Fingertips to palm")
 listbox.insert(7, "Turning off the faucet with a paper towel")
+listbox.place(relx = 0.9, rely = 0.522, anchor = 'e')
 
 def update(ind):
     listbox.delete(ind)
-    listbox.insert(ind + 1, procedures[ind] + " —— DONE")
+    listbox.insert(ind + 1, procedures[ind] + " — DONE")
+
+update(3)
 
 countdown()
-print("Matplotlib Version : {}".format(matplotlib.__version__))
+
 root.mainloop()
