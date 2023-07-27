@@ -12,12 +12,8 @@ image1 = ImageTk.PhotoImage(image1)
 label1 = tk.Label(root, image = image1)
 label1.place(x = 0,y = 0)
 
-# Create the logo
-'''
-image = Image.open("sofos.png")
-photo_image = ImageTk.PhotoImage(image)
-sofos = tk.Label(root, image = photo_image)
-sofos.place(relx = 0, rely = 1, anchor = "sw")'''
+button = tk.Button(root, text = "Start Program", command = update)
+button.place(relx = 0.5, rely = 0.8, anchor = "center")
 
 font1 = TkFont.Font(family = "Inter", weight = "bold", size = 55)
 greeting = tk.Label(root, text = "Hi,\nThea!", font = font1, padx = 35, wraple>
