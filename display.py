@@ -1,4 +1,4 @@
-mport tkinter as tk
+import tkinter as tk
 from PIL import Image, ImageTk
 import tk_tools
 import time
