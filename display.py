@@ -2,7 +2,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import tk_tools
 import time
-import matplotlib
 import tkinter.font as TkFont
 
 # Create the main window
@@ -58,5 +57,8 @@ def cont():
     listbox.place(relx = 0.9, rely = 0.522, anchor = 'e')
     
     countdown()
+
+button = tk.Button(root, text="Start washing hands!", command = cont())
+button.pack()
 
 root.mainloop()
