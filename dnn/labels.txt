@@ -1,0 +1,7 @@
+0  other hand washing movement
+1  palm to palm
+2  palm over dorsum, fingers interlaced
+3  palm to palm, fingers interlaced
+4  backs of fingers to opposing palm, fingers interlocked
+5  rotational rubbing of the thumb
+6  fingertips to palm
